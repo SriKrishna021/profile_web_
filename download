@@ -1,0 +1,11 @@
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || '/api',
+  timeout: 10000,
+});
+
+export const fetchProjects = () => api.get('/projects').then(r => r.data.data);
+export const sendMessage   = (data) => api.post('/contact', data).then(r => r.data);
+
+export default api;

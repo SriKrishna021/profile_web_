@@ -1,0 +1,27 @@
+import { useState, useEffect } from 'react';
+import { fetchProjects } from '../utils/api';
+
+// Fallback data if backend is offline
+const FALLBACK = [
+  { id:1, num:'01', title:'E-Commerce Platform', description:'Full-stack marketplace with real-time inventory, Stripe payments, admin dashboard, and automated email notifications.', detail:'Built with a microservices architecture. Handles 5,000+ daily transactions.', tags:['React','Node.js','PostgreSQL','Stripe','Redis','Docker'], tech:['React.js','Express.js','PostgreSQL','Stripe API'], status:'live', github_url:'#', live_url:'#' },
+  { id:2, num:'02', title:'Task Management SaaS', description:'Collaborative project management with Kanban boards, real-time updates, and analytics.', detail:'Real-time collaboration using Socket.io. JWT auth with OAuth2 support.', tags:['React','Socket.io','MongoDB','JWT'], tech:['React.js','Socket.io','MongoDB','Node.js'], status:'live', github_url:'#', live_url:'#' },
+  { id:3, num:'03', title:'Developer Blog CMS',  description:'Headless CMS with Markdown support, syntax highlighting, SEO optimization, and newsletter.', detail:'ISR static generation. MDX content with custom components.', tags:['Next.js','PostgreSQL','MDX','Vercel'], tech:['Next.js','PostgreSQL','MDX','SendGrid'], status:'live', github_url:'#', live_url:'#' },
+  { id:4, num:'04', title:'AI Chat Application', description:'Real-time chat with AI smart replies, language detection, and end-to-end encryption.', detail:'FastAPI backend with WebSocket support. OpenAI API integration.', tags:['React','FastAPI','WebSockets','OpenAI'], tech:['React.js','FastAPI','PostgreSQL','OpenAI API'], status:'wip',  github_url:'#', live_url:'#' },
+  { id:5, num:'05', title:'Finance Tracker',     description:'Personal finance dashboard with budget alerts, analytics, CSV import, and multi-currency.', detail:'Django REST with Celery for scheduled alerts. Chart.js dashboards.', tags:['React','Django','MySQL','Chart.js'], tech:['React.js','Django','MySQL','Celery'], status:'live', github_url:'#', live_url:'#' },
+  { id:6, num:'06', title:'Social Media API',    description:'RESTful API: followers, posts, likes, comments, notifications, and full-text search.', detail:'GraphQL API with real-time subscriptions. Elasticsearch for search.', tags:['Node.js','MongoDB','GraphQL','Elasticsearch'], tech:['Node.js','MongoDB','GraphQL','Redis'], status:'live', github_url:'#', live_url:'#' },
+];
+
+export default function useProjects() {
+  const [projects, setProjects] = useState([]);
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState(null);
+
+  useEffect(() => {
+    fetchProjects()
+      .then(data => setProjects(data))
+      .catch(() => { setError('Using local data'); setProjects(FALLBACK); })
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { projects, loading, error };
+}
